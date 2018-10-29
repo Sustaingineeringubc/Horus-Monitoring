@@ -35,6 +35,8 @@ class App extends Component {
       }
       this.setState({ authUser : true}) 
     });
+    console.log('component did mount')
+    this.setState({ authUser: true });
   };
   
   render() {
