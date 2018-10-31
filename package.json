@@ -1,5 +1,5 @@
 {
-  "name": "horus",
+  "name": "Horus",
   "version": "0.1.0",
   "author": "Juan Luis Flores, Felipe, Adrian, Isreael Trujillo",
   "description": "Horus monitoring system",
@@ -34,7 +34,7 @@
     "wait-on": "^3.0.1"
   },
   "build": {
-    "appId": "com.horus",
+    "appId": "com.Horus",
     "productName": "Horus",
     "win": {},
     "mac": {},

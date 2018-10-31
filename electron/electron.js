@@ -10,11 +10,13 @@ let windows = {};
 
 function createWindow() {
   console.log('[ INFO ] Creating Window')
+  console.log(path.join(__dirname, '../src/assets/icons/png/64x64.png'))
   // Create the browser window.
   windows.mainWindow = new BrowserWindow({
     width: 900,
     height: 680,
-    show: false
+    show: false,
+    icon: path.join(__dirname, '../src/assets/icons/png/64x64.png')
   });
   // Lozd the index.html of the app.
   windows.mainWindow.loadURL(isDev ?
