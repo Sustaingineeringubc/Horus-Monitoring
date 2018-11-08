@@ -44,12 +44,13 @@ class SignUpPage extends Component {
   }
 
   signUp = () => {
+    const { history } = this.props;
     const password = this.state.password;
     const email = this.state.email;
     const organization = this.state.organization;
     const username = this.state.username;
     ipcRenderer.send("sign-up", { password, email, organization, username });
-    console.log("click");
+    history.push("/login");
   };
 
   dialogPromptOpen = message => {
@@ -66,20 +67,18 @@ class SignUpPage extends Component {
   handleChange = event => {
     const name = event.target.name;
     const value = event.target.value;
-    this.setState ({[name]: value})
+    this.setState({ [name]: value });
   };
 
   handleChangeEmail = event => {
     const name = event.target.name;
     const value = event.target.value;
-    const filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-    const test = !filter.test(event.target.value)
-    this.setState (
-      {
-        email: value,
-        isValidEmail: test
-      }
-    )
+    const filter = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
+    const test = !filter.test(event.target.value);
+    this.setState({
+      email: value,
+      isValidEmail: test
+    });
   };
 
   render() {
@@ -88,7 +87,10 @@ class SignUpPage extends Component {
 
     // Add logic for password validation; discuss with management.
     const isInvalid =
-      organization === "" || username === "" || this.state.isValidEmail || password === "";
+      organization === "" ||
+      username === "" ||
+      this.state.isValidEmail ||
+      password === "";
 
     return (
       <Fragment>
@@ -147,7 +149,11 @@ class SignUpPage extends Component {
                   <FormControl margin="normal" required fullWidth>
                     <TextField
                       id="emailField"
-                      label={this.state.isValidEmail ? "Invalid Email" : "Email Address"}
+                      label={
+                        this.state.isValidEmail
+                          ? "Invalid Email"
+                          : "Email Address"
+                      }
                       placeholder="Email address"
                       type="email"
                       name="email"
@@ -178,7 +184,7 @@ class SignUpPage extends Component {
                         className: classes.input
                       }}
                     />
-                  </FormControl>  
+                  </FormControl>
                   <Button
                     fullWidth
                     disabled={isInvalid}
