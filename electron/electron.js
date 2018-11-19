@@ -73,7 +73,11 @@ ipcMain.on('sign-up', async (e, msg) => {
       e.sender.send('is-new-user', {error:"User already exists"})
       return
     }
+    else {
     await datastore.newUser(msg)
+    e.sender.send('is-new-user', {success: "Account successfully created."})
+    console.log("added new user");
+    }
   } catch(error) {
     e.sender.send('is-new-user', false)
   }
