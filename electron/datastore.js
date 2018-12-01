@@ -470,6 +470,7 @@ var insert = exports.insert = function (object, tableName) {
     })
 }
 
+// note this creates a new object with the same id as the one altered
 var update = exports.update = function (query, updateModifier, options, tableName) {
     return new Promise((resolve, reject) => {
         udb[tableName].update(query, updateModifier, options, (error, numAffected, affectedDocuments, upsert) => {
