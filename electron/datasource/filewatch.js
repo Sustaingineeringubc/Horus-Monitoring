@@ -1,7 +1,7 @@
 
 const { ipcMain } = require('electron');
 const datastore = require('../datastore');
-
+const cloudData = require('../../firebase/sensorData');
 //JSON Lines 
 const jsonlines = require('jsonlines');
 var parser = jsonlines.parse({ emitInvalidLines: true })
@@ -11,7 +11,7 @@ var initiatedRead = false;
 var lastRead = null;
 var needsUpdate = true
 const fs = require('fs');
-
+const CLOUD_ACTIVE = process.env.CLOUD_ACTIVE || false;
 const DATA_TYPE_HISTORY = 'DATA_TYPE_HISTORY';
 const DATA_TYPE_SUMARY = 'DATA_TYPE_SUMARY';
 
@@ -38,6 +38,7 @@ try {
             return
           }
           try {
+              uploadToCloud(data)
               await datastore.storeSensorData(data)
               needsUpdate = true
             } catch(error) {
@@ -47,6 +48,7 @@ try {
         .on('end', async data => {
           if (!initiatedRead) {
             try {
+              uploadToCloud(lastRead)
               await datastore.storeSensorData(lastRead)
               needsUpdate = true
             } catch(error) {
@@ -72,6 +74,12 @@ exports.getNeedsUpdate = () => {
 
 exports.setNeedsUpdate = (val) => {
   needsUpdate = val
+}
+
+var uploadToCloud = function(data) {
+  if(CLOUD_ACTIVE){
+    cloudData.uploadData(data);
+  }
 }
 
 /*

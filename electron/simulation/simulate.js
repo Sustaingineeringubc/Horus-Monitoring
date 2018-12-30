@@ -8,7 +8,7 @@ let currentTime = 0;
 
 //TODO: with user_id, fetch user sensor list to randomly print data, user number, 
 let startSimulation = exports.startSimulation = async () => {
-    timer = setInterval(writeFile, 3500);
+    timer = setInterval(writeFile, 5500);
 }
 startSimulation()
 let stopSimulation = exports.stopSimulation = async () => {
@@ -21,7 +21,7 @@ function writeFile() {
     let data = generateRandomData()
     data.pumpId = 'S1'
     let fileVal =  {
-        number: '+16041234567',
+        number: '0994636995',
         date: Math.round((new Date()).getTime() / 1000),
         data: data
     }

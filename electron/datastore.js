@@ -326,7 +326,6 @@ exports.storeSensorData = function (data) {
             //TODO: Check for new User ID
             data.userId = user_id;
             let newDoc = await insert(data, "dataCollection");
-
             return resolve()
         } catch (error) {
             console.log(`error: ${error}`);
@@ -385,7 +384,7 @@ exports.getRealTime = function (data, n) {
         try {
             let userId = user_id;
             let pumpId = data.pumpId;
-            let count = n ? n : 5;
+            let count = n ? n : 10;
             udb['dataCollection']
                 .find({
                     userId: userId,
