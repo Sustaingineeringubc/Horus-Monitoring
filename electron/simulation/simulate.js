@@ -19,7 +19,7 @@ function writeFile() {
     if(currentTime === MAX_TIME) { stopSimulation }
     currentTime += 1
     let data = generateRandomData()
-    data.pumpId = 'S1'
+    data.pumpId = 'S' + randomInt(1,4); 
     let fileVal =  {
         number: '0994636995',
         date: Math.round((new Date()).getTime() / 1000),
