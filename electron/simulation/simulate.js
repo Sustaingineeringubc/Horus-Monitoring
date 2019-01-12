@@ -8,7 +8,7 @@ let currentTime = 0;
 
 //TODO: with user_id, fetch user sensor list to randomly print data, user number, 
 let startSimulation = exports.startSimulation = async () => {
-    timer = setInterval(writeFile, 5500);
+    timer = setInterval(writeFile, 2500);
 }
 startSimulation()
 let stopSimulation = exports.stopSimulation = async () => {

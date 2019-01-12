@@ -169,7 +169,7 @@ app.on('ready', async () => {
     createWindow();
     console.log(`[ INFO ] Initializing React Dev Tools`);
     let name = await  installExtension(REACT_DEVELOPER_TOOLS)
-    console.log(`[INFO] Added Extension: ${name}`);
+    console.log(`[ INFO ] Added Extension: ${name}`);
     console.log(`[ INFO ] Initializing datastore`)
     await datastore.initializeDataStore()
     console.log(`[ INFO ] Starting File Watch Thread`)
