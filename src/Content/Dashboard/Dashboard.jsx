@@ -16,6 +16,7 @@ import HistoryChart from "./historyChart";
 //Style
 import dashboardStyle from "./dashboardStyle";
 import { mainTheme } from "../../assets/jss/mainStyle";
+import { DatePicker } from "material-ui-pickers";
 // Electron
 const electron = window.require("electron");
 const ipcRenderer = electron.ipcRenderer;
@@ -26,7 +27,12 @@ class Dashboard extends Component {
     voltageData: [],
     currentData: [],
     powerData: [],
-    tempData: []
+    tempData: [],
+    selectedDate: "2019-01-20T20:46:24.142Z"
+  };
+
+  handleDateChange = date => {
+    this.setState({ selectedDate: date });
   };
 
   tick = () => {
@@ -40,10 +46,32 @@ class Dashboard extends Component {
       if (msg.error) {
         // return alert(msg.error);
       } else {
-        const voltageDummyData = msg.data[0];
-        const currentDummyData = msg.data[1];
-        const powerDummyData = msg.data[2];
-        const tempDummyData = msg.data[3];
+        // const voltageDummyData = msg.data[0];
+        // const currentDummyData = msg.data[1];
+        // const powerDummyData = msg.data[2];
+        // const tempDummyData = msg.data[3];
+        const voltageDummyData = [
+          { name: "11/9/18", voltage: 174 },
+          { name: "11/9/18", voltage: 134 },
+          { name: "11/9/18", voltage: 184 }
+        ];
+        const currentDummyData = [
+          { name: "11/9/18", current: 734 },
+          { name: "11/9/18", current: 740 },
+          { name: "11/9/18", current: 800 }
+        ];
+        const powerDummyData = [
+          { name: "11/9/18", power: 4 },
+          { name: "11/9/18", power: 5 },
+          { name: "11/9/18", power: 8 }
+        ];
+        const tempDummyData = [
+          { name: "11/9/18", opTemp: 74, suTemp: 2.2 },
+          { name: "12/9/18", opTemp: 64, suTemp: 0.7 },
+          { name: "13/9/18", opTemp: 12, suTemp: 1.6 },
+          { name: "14/9/18", opTemp: 79, suTemp: 0.8 },
+          { name: "15/9/18", opTemp: 82, suTemp: 5.1 }
+        ];
         this.setState({
           voltageData: voltageDummyData,
           currentData: currentDummyData,
@@ -64,7 +92,7 @@ class Dashboard extends Component {
 
   render() {
     const { classes } = this.props;
-    const { value } = this.state;
+    const { value, selectedDate } = this.state;
 
     return (
       <Fragment>
@@ -134,6 +162,26 @@ class Dashboard extends Component {
             {value === 1 && (
               <Fragment>
                 <Grid container spacing={24}>
+                  <Grid item xs={12} sm={12} md={6}>
+                    <DatePicker
+                      label="Start"
+                      showTodayButton
+                      maxDateMessage="Date must be less than End and Today"
+                      format="dd/MM/yyyy"
+                      value={selectedDate}
+                      onChange={this.handleDateChange}
+                    />
+                  </Grid>
+                  {/* <Grid item xs={12} sm={12} md={6}>
+                    <DatePicker
+                      label="End"
+                      showTodayButton
+                      maxDateMessage="Date must be less than Today"
+                      format="dd/MM/yyyy"
+                      value={selectedDate}
+                      onChange={this.handleDateChange}
+                    />
+                  </Grid> */}
                   <Grid item xs={12} sm={12} md={6}>
                     <HistoryChart
                       data={this.state.voltageData}

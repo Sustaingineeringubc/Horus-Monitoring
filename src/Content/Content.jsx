@@ -23,15 +23,16 @@ class Content extends Component {
     };
   }
 
-  componentWillMount = () => {
+  componentDidMount = () => {
+    var temp = [];
     ipcRenderer.on("get-sensor-list", (e, msg) => {
       if (msg.error) {
-        // return alert(msg.error);
+        return alert(msg.error);
       } else {
-        // return alert(msg);
+        return alert(msg);
       }
     });
-    var temp = [
+    temp = [
       { name: "S1", type: "default" },
       { name: "S2", type: "default" },
       { name: "S3", type: "default" },
