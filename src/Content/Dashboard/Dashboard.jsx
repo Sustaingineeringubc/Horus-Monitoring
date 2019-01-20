@@ -7,7 +7,8 @@ import {
   Tabs,
   Tab,
   Typography,
-  MuiThemeProvider
+  MuiThemeProvider,
+  createMuiTheme
 } from "@material-ui/core";
 // Components
 import MonitoringData from "./MonitoringData";
@@ -20,7 +21,37 @@ import { DatePicker } from "material-ui-pickers";
 // Electron
 const electron = window.require("electron");
 const ipcRenderer = electron.ipcRenderer;
-
+const materialTheme = createMuiTheme({
+  overrides: {
+    MuiPickersToolbar: {
+      toolbar: {
+        backgroundColor: "#27293d"
+      }
+    },
+    MuiPickersCalendarHeader: {
+      switchHeader: {
+        // backgroundColor: lightBlue.A200,
+        // color: 'white',
+      }
+    },
+    MuiPickersDay: {
+      day: {
+        color: "#27293d"
+      },
+      selected: {
+        backgroundColor: "#27293d"
+      },
+      current: {
+        color: "#1e1e2d"
+      }
+    },
+    MuiPickersModal: {
+      dialogAction: {
+        color: "#27293d"
+      }
+    }
+  }
+});
 class Dashboard extends Component {
   state = {
     value: 0,
@@ -28,11 +59,15 @@ class Dashboard extends Component {
     currentData: [],
     powerData: [],
     tempData: [],
-    selectedDate: "2019-01-20T20:46:24.142Z"
+    startDate: new Date(),
+    endDate: new Date()
   };
 
-  handleDateChange = date => {
-    this.setState({ selectedDate: date });
+  handlestartDateChange = date => {
+    this.setState({ startDate: date });
+  };
+  handleendDateChange = date => {
+    this.setState({ endDate: date });
   };
 
   tick = () => {
@@ -92,7 +127,7 @@ class Dashboard extends Component {
 
   render() {
     const { classes } = this.props;
-    const { value, selectedDate } = this.state;
+    const { value } = this.state;
 
     return (
       <Fragment>
@@ -162,26 +197,30 @@ class Dashboard extends Component {
             {value === 1 && (
               <Fragment>
                 <Grid container spacing={24}>
-                  <Grid item xs={12} sm={12} md={6}>
-                    <DatePicker
-                      label="Start"
-                      showTodayButton
-                      maxDateMessage="Date must be less than End and Today"
-                      format="dd/MM/yyyy"
-                      value={selectedDate}
-                      onChange={this.handleDateChange}
-                    />
+                  <Grid item xs={12} sm={12} md={12}>
+                    <MuiThemeProvider theme={materialTheme}>
+                      <center>
+                        <DatePicker
+                          label="Start"
+                          showTodayButton
+                          maxDateMessage="Date must be less than End and Today"
+                          format="dd/MM/yyyy"
+                          value={this.state.startDate}
+                          onChange={this.handlestartDateChange}
+                          className={classes.datepicker}
+                        />
+                        <DatePicker
+                          label="End"
+                          showTodayButton
+                          maxDateMessage="Date must be less than Today"
+                          format="dd/MM/yyyy"
+                          value={this.state.endDate}
+                          onChange={this.handleendDateChange}
+                          className={classes.datepicker}
+                        />
+                      </center>
+                    </MuiThemeProvider>
                   </Grid>
-                  {/* <Grid item xs={12} sm={12} md={6}>
-                    <DatePicker
-                      label="End"
-                      showTodayButton
-                      maxDateMessage="Date must be less than Today"
-                      format="dd/MM/yyyy"
-                      value={selectedDate}
-                      onChange={this.handleDateChange}
-                    />
-                  </Grid> */}
                   <Grid item xs={12} sm={12} md={6}>
                     <HistoryChart
                       data={this.state.voltageData}

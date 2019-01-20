@@ -28,6 +28,11 @@ const dashboardStyle = theme => ({
       color: 'white',
       opacity: 1
     }
+  },
+  datepicker: {
+    margin: 20,
+    color: 'white',
+    borderBottomColor: 'white'
   }
 })
 
