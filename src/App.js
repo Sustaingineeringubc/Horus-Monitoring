@@ -11,9 +11,9 @@ import SignUpPage from "./Pages/Auth/SignUp";
 import ForgotPassword from "./Pages/Auth/ForgotPassword"
 import NewPassword from "./Pages/Auth/NewPassword"
 // Date Picker
-import DateFnsUtils from "material-ui-pickers/utils/date-fns-utils";
-import MuiPickersUtilsProvider from "material-ui-pickers/MuiPickersUtilsProvider";
-import TitleBar from "./Layout/TitleBar/titlebar.jsx";
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider } from 'material-ui-pickers';
+// import TitleBar from "./Layout/TitleBar/titlebar.jsx";
 
 // Electron
 const electron = window.require("electron");
