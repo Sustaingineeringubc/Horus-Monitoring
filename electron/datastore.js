@@ -269,10 +269,6 @@ exports.getNewestSensorData = function (pumpId) {
                     userId: userId,
                     "data.pumpId": pumpId
                 })
-                .sort({
-                    createdAt: -1
-                })
-                .limit(1)
                 .exec(function (error, data) {
                     if (error) {
                         return reject(error)
@@ -302,9 +298,6 @@ exports.getSummaryData = function (data) {
                         $lte: to,
                         $gte: from
                     }
-                })
-                .sort({
-                    createdAt: -1
                 })
                 .exec(async (error, result) => {
                     if (error) {
