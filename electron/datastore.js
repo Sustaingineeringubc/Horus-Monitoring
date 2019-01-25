@@ -289,9 +289,6 @@ exports.getSummaryData = function (data) {
         try {
             let userId = user_id
             let { pumpId, from, to } = data
-            to = new Date(to).getTime() / 1000
-            from = new Date(from).getTime() / 1000
-            console.log('params', pumpId, from, to)
             udb['dataCollection'].find({
                     userId: userId,
                     "data.pumpId": pumpId,
@@ -339,7 +336,7 @@ exports.getSummaryData = function (data) {
                     let average = await statistics.getAvgFromData(response)
                     let max = await statistics.getMaxFromData(response)
                     let min = await statistics.getMinFromData(response) 
-                    console.log('statis', average, max, min)
+
                     let summary = {
                         average,
                         max, 
