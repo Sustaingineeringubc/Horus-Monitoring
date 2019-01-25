@@ -287,13 +287,11 @@ exports.getNewestSensorData = function (pumpId) {
 exports.getSummaryData = function (data) {
     return new Promise((resolve, reject) => {
         try {
-            let userId = user_id;
-            let {
-                pumpId,
-                from,
-                to
-            } = data
-
+            let userId = user_id
+            let { pumpId, from, to } = data
+            to = new Date(to).getTime() / 1000
+            from = new Date(from).getTime() / 1000
+            console.log('params', pumpId, from, to)
             udb['dataCollection'].find({
                     userId: userId,
                     "data.pumpId": pumpId,
@@ -310,7 +308,7 @@ exports.getSummaryData = function (data) {
                         return reject(error)
                     }
                     if (result.length <= 0) {
-                        return resolve()
+                        return resolve(false)
                     }
                     let voltageList = new Array();
                     let currentList = new Array();
@@ -341,12 +339,12 @@ exports.getSummaryData = function (data) {
                     let average = await statistics.getAvgFromData(response)
                     let max = await statistics.getMaxFromData(response)
                     let min = await statistics.getMinFromData(response) 
-
-                    let summary = [
+                    console.log('statis', average, max, min)
+                    let summary = {
                         average,
                         max, 
                         min
-                    ]
+                    }
 
                     return resolve(summary)
                 })

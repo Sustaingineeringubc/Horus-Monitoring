@@ -94,7 +94,9 @@ ipcMain.on('get-sensor-data', async (e, msg) => {
 
 ipcMain.on('get-sensor-summary', async (e, msg) => {
   try {
-    let summary = await datastore.getSummaryData(msg.pumpId)
+    console.log('dataBeing sent', msg)
+    let summary = await datastore.getSummaryData(msg)
+    console.log('Test response: ', summary)
     e.sender.send('get-sensor-summary', {data: summary})
   } catch(error) {
     e.sender.send('get-sensor-summary', false)

@@ -47,7 +47,10 @@ class Dashboard extends Component {
     powerData: [],
     tempData: [],
     fromDate: "2019-01-01",
-    toDate: "2019-01-02"
+    toDate: "2019-01-02",
+    average: [],
+    max: [],
+    min: []
   };
 
   tick = () => {
@@ -72,14 +75,20 @@ class Dashboard extends Component {
         });
       }
     });
-    // ipcRenderer.on("get-sensor-summary", (e, msg) => {
-    //   if (msg.error) {
-    //     alert(msg.error);
-    //   } else {
-    //     console.log("Back with info");
-    //     console.log(msg);
-    //   }
-    // });
+    ipcRenderer.on("get-sensor-summary", (e, msg) => {
+      if (msg.error) {
+        alert(msg.error);
+      } else {
+        console.log("Back with info");
+        console.log(msg)
+        this.setState( {
+          average: msg.data.average,
+          max: msg.data.max,
+          min: msg.data.min
+        }) 
+        console.log(this.state.average, this.state.max, this.state.min)
+      }
+    });
   };
 
   componentWillUnmount = () => {
@@ -113,6 +122,8 @@ class Dashboard extends Component {
     const { classes } = this.props;
     const { value } = this.state;
     let id = 0;
+
+    
     const rows = [
       createData("Average", 159, 6.0, 24, 4.0, 9.0, id),
       createData("Max", 237, 9.0, 37, 4.3, 4.3, id),
