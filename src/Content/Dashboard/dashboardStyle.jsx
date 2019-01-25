@@ -7,7 +7,7 @@ const dashboardStyle = theme => ({
     // marginLeft: '100px',
     // marginRight: '30px',
     paddingTop: 15,
-    height: '100%'
+    height: '100%',
   },
   title: {
     color: 'white',
@@ -28,7 +28,29 @@ const dashboardStyle = theme => ({
       color: 'white',
       opacity: 1
     }
-  }
+  },
+  container: {
+    display: 'inline',
+    flexWrap: 'wrap',
+    color: 'white',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    marginTop: 20,    
+    width: 200,
+  },
+  tableRoot: {
+    width: '100%',
+    marginTop: theme.spacing.unit * 3,
+    overflowX: 'auto',
+  },
+  table: {
+    minWidth: 700,
+  },
+  row: {
+  },
+  
 })
 
 export default dashboardStyle

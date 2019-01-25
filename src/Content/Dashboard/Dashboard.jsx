@@ -2,10 +2,18 @@ import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 // Material UI Components
 import {
+  Button,
   Grid,
   withStyles,
   Tabs,
   Tab,
+  Table,
+  Paper,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  TextField,
   Typography,
   MuiThemeProvider
 } from "@material-ui/core";
@@ -20,13 +28,26 @@ import { mainTheme } from "../../assets/jss/mainStyle";
 const electron = window.require("electron");
 const ipcRenderer = electron.ipcRenderer;
 
+const CustomTableCell = withStyles(theme => ({
+  head: {
+    backgroundColor: "rgb(40,42,60)",
+    color: theme.palette.common.white
+  },
+  body: {
+    fontSize: 14,
+    background: "lightGray"
+  }
+}))(TableCell);
+
 class Dashboard extends Component {
   state = {
     value: 0,
     voltageData: [],
     currentData: [],
     powerData: [],
-    tempData: []
+    tempData: [],
+    fromDate: "2019-01-01",
+    toDate: "2019-01-02"
   };
 
   tick = () => {
@@ -36,7 +57,6 @@ class Dashboard extends Component {
   componentWillMount = () => {
     this.interval = setInterval(this.tick.bind(this), 1000);
     ipcRenderer.on("get-sensor-data", (e, msg) => {
-      console.log("renderer", msg.data[0], msg.data);
       if (msg.error) {
         // return alert(msg.error);
       } else {
@@ -52,6 +72,14 @@ class Dashboard extends Component {
         });
       }
     });
+    // ipcRenderer.on("get-sensor-summary", (e, msg) => {
+    //   if (msg.error) {
+    //     alert(msg.error);
+    //   } else {
+    //     console.log("Back with info");
+    //     console.log(msg);
+    //   }
+    // });
   };
 
   componentWillUnmount = () => {
@@ -62,9 +90,54 @@ class Dashboard extends Component {
     this.setState({ value });
   };
 
+  handleSendChange = () => {
+    console.log("starting sending");
+    console.log(this.props.sensorName);
+    console.log(this.state.fromDate);
+    console.log(this.state.toDate);
+    ipcRenderer.send("get-sensor-summary", {
+      pumpId: this.props.sensorName,
+      from: this.state.fromDate,
+      to: this.state.toDate
+    });
+    console.log("info sent");
+  };
+
+  // handleToTextFieldChange = (e) => {
+  //   this.setState({
+  //       toDate: e.target.value,
+  //   });
+  // }
+
   render() {
     const { classes } = this.props;
     const { value } = this.state;
+    let id = 0;
+    const rows = [
+      createData("Average", 159, 6.0, 24, 4.0, 9.0, id),
+      createData("Max", 237, 9.0, 37, 4.3, 4.3, id),
+      createData("Min", 262, 16.0, 24, 6.0, 4.3, id)
+    ];
+
+    function createData(
+      name,
+      voltage,
+      current,
+      power,
+      atmosphericTemperature,
+      solarPanelTemperature
+    ) {
+      id += 1;
+      return {
+        name,
+        voltage,
+        current,
+        power,
+        atmosphericTemperature,
+        solarPanelTemperature,
+        id
+      };
+    }
 
     return (
       <Fragment>
@@ -173,7 +246,99 @@ class Dashboard extends Component {
                 </Grid>
               </Fragment>
             )}
-            {value === 2 && <Fragment>Summary</Fragment>}
+            {value === 2 && (
+              <Fragment>
+                <form className={classes.container} noValidate>
+                  <TextField
+                    id="fromDate"
+                    label="From"
+                    type="date"
+                    className={classes.textField}
+                    defaultValue={this.state.fromDate}
+                    onChange={e => this.setState({ fromDate: e.target.value })}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                  />
+                </form>
+                <form className={classes.container} noValidate>
+                  <TextField
+                    id="toDate"
+                    label="To"
+                    type="date"
+                    className={classes.textField}
+                    defaultValue={this.state.toDate}
+                    onChange={e => this.setState({ toDate: e.target.value })}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                  />
+                </form>
+                <Button
+                  variant="outlined"
+                  className={classes.textField}
+                  onClick={() => {
+                    console.log("starting sending");
+                    console.log(this.props.sensorName);
+                    console.log(this.state.fromDate);
+                    console.log(this.state.toDate);
+                    ipcRenderer.send("get-sensor-summary", {
+                      pumpId: this.props.sensorName,
+                      from: this.state.fromDate,
+                      to: this.state.toDate
+                    });
+                    console.log("Info sent");
+                  }}
+                >
+                  Send
+                </Button>
+
+                <Paper className={classes.tableRoot}>
+                  <Table className={classes.table}>
+                    <TableHead>
+                      <TableRow>
+                        <CustomTableCell>Values</CustomTableCell>
+                        <CustomTableCell align="right">Voltage</CustomTableCell>
+                        <CustomTableCell align="right">Current</CustomTableCell>
+                        <CustomTableCell align="right">Power</CustomTableCell>
+                        <CustomTableCell align="right">
+                          Atmospheric Temperature
+                        </CustomTableCell>
+                        <CustomTableCell align="right">
+                          Solar Panel Temperature
+                        </CustomTableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {rows.map(row => {
+                        return (
+                          <TableRow className={classes.row} key={row.id}>
+                            <CustomTableCell component="th" scope="row">
+                              {row.name}
+                            </CustomTableCell>
+                            <CustomTableCell align="center">
+                              {row.voltage}
+                            </CustomTableCell>
+                            <CustomTableCell align="center">
+                              {row.current}
+                            </CustomTableCell>
+                            <CustomTableCell align="center">
+                              {row.power}
+                            </CustomTableCell>
+                            <CustomTableCell align="center">
+                              {row.atmosphericTemperature}
+                            </CustomTableCell>
+                            <CustomTableCell align="center">
+                              {row.solarPanelTemperature}
+                            </CustomTableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </Paper>
+              </Fragment>
+            )}
           </div>
         </MuiThemeProvider>
       </Fragment>
