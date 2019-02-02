@@ -101,13 +101,19 @@ class Dashboard extends Component {
 
   handleSendChange = () => {
     console.log("starting sending");
+
+    let toDate = new Date(this.state.toDate).getTime() / 1000;
+    let fromDate = new Date(this.state.fromDate).getTime() / 1000;
+    let pumpId = this.props.sensorName;
+
     console.log(this.props.sensorName);
-    console.log(this.state.fromDate);
-    console.log(this.state.toDate);
+    console.log(toDate);
+    console.log(fromDate);
+
     ipcRenderer.send("get-sensor-summary", {
-      pumpId: this.props.sensorName,
-      from: this.state.fromDate,
-      to: this.state.toDate
+      pumpId: pumpId,
+      from: fromDate,
+      to: toDate,
     });
     console.log("info sent");
   };
@@ -264,11 +270,13 @@ class Dashboard extends Component {
                     id="fromDate"
                     label="From"
                     type="date"
+                    colorPrimary
                     className={classes.textField}
                     defaultValue={this.state.fromDate}
                     onChange={e => this.setState({ fromDate: e.target.value })}
                     InputLabelProps={{
-                      shrink: true
+                      shrink: true,
+                      color: 'white'
                     }}
                   />
                 </form>
@@ -287,19 +295,8 @@ class Dashboard extends Component {
                 </form>
                 <Button
                   variant="outlined"
-                  className={classes.textField}
-                  onClick={() => {
-                    console.log("starting sending");
-                    console.log(this.props.sensorName);
-                    console.log(this.state.fromDate);
-                    console.log(this.state.toDate);
-                    ipcRenderer.send("get-sensor-summary", {
-                      pumpId: this.props.sensorName,
-                      from: this.state.fromDate,
-                      to: this.state.toDate
-                    });
-                    console.log("Info sent");
-                  }}
+                  className={classes.customButton}
+                  onClick={() => {this.handleSendChange()}}
                 >
                   Send
                 </Button>
