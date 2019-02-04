@@ -94,8 +94,6 @@ class Dashboard extends Component {
       if (msg.error) {
         alert(msg.error);
       } else {
-        console.log("Back with info");
-        console.log(msg);
         this.setState({
           //Avg
           voltageAvg: msg.data.average.voltageAvg,
@@ -129,22 +127,16 @@ class Dashboard extends Component {
   };
 
   handleSendChange = () => {
-    console.log("starting sending");
 
     let toDate = new Date(this.state.toDate).getTime() / 1000;
     let fromDate = new Date(this.state.fromDate).getTime() / 1000;
-    let pumpId = this.props.sensorName;
-
-    console.log(this.props.sensorName);
-    console.log(toDate);
-    console.log(fromDate);
+    let pumpId = this.props.sensorName;  
 
     ipcRenderer.send("get-sensor-summary", {
       pumpId: pumpId,
       from: fromDate,
       to: toDate
     });
-    console.log("info sent");
   };
 
   // handleStartSimulation = () => {
