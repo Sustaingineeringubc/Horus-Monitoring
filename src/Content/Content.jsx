@@ -25,21 +25,22 @@ class Content extends Component {
 
   componentDidMount = () => {
     var temp = [];
-    ipcRenderer.on("get-sensor-list", (e, msg) => {
+    ipcRenderer.send("get-user-sensors", (e, msg) => {
       if (msg.error) {
+        console.log(msg.error);
         return alert(msg.error);
       } else {
-        return alert(msg);
+        console.log(msg);
+        var temp = [
+          { name: "S1", type: "default" },
+          { name: "S2", type: "default" },
+          { name: "S3", type: "default" },
+          { name: "S4", type: "default" },
+          { name: "S5", type: "default" }
+        ];
+        this.setState({ sensorsList: temp });
       }
     });
-    temp = [
-      { name: "S1", type: "default" },
-      { name: "S2", type: "default" },
-      { name: "S3", type: "default" },
-      { name: "S4", type: "default" },
-      { name: "S5", type: "default" }
-    ];
-    this.setState({ sensorsList: temp });
   };
 
   render() {

@@ -67,12 +67,16 @@ ipcMain.on('is-active-session', async (e, msg) => {
 })
 
 ipcMain.on('get-user-sensors', async (e,msg) => {
-  return e.sender.send('get-user-sensors',{'sensors': datastore.getUserSensors(msg.userId)})
+  console.log('Get user sensors IPC Bus')
+  // msg.user = await datastore.getUserName()
+  return e.sender.send('get-user-sensors',{
+    'sensors': datastore.getUserSensors(datastore.getUserName())
+  })
 })
 
 ipcMain.on('log-out', async (e, msg) => {
   try {
-    user = '';
+    user = ''
     await log.logOut()
     return e.sender.send('log-out', {'log-out': true})
   } catch(error) {
@@ -126,7 +130,7 @@ ipcMain.on('log-in', async (e, msg) => {
     let isLoggedIn = await log.loginUser(msg.user, msg.password, msg.isRemembered) //TODO: Ensure msg order is correct
     if (!isLoggedIn) {
       e.sender.send('log-in', {error: 'Incorrect username or password'})
-      return;
+      return
     }
     e.sender.send('log-in-app', 'Successfully logged in')/////////// TODO: Check this
   } catch(error) {
