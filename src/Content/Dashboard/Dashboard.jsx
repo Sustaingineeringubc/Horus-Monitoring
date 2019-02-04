@@ -46,11 +46,26 @@ class Dashboard extends Component {
     currentData: [],
     powerData: [],
     tempData: [],
-    fromDate: "2019-01-01",
-    toDate: "2019-01-02",
-    average: [],
-    max: [],
-    min: []
+    fromDate: "",
+    toDate: "",
+    //Avg
+    voltageAvg: 0,
+    currentAvg: 0,
+    powerAvg: 0,
+    opTempAvg: 0,
+    suTempAvg: 0,
+    //Max
+    voltageMax: 0,
+    currentMax: 0,
+    powerMax: 0,
+    opTempMax: 0,
+    suTempMax: 0,
+    //Min
+    voltageMin: 0,
+    currentMin: 0,
+    powerMin: 0,
+    opTempMin: 0,
+    suTempMin: 0
   };
 
   tick = () => {
@@ -80,13 +95,27 @@ class Dashboard extends Component {
         alert(msg.error);
       } else {
         console.log("Back with info");
-        console.log(msg)
-        this.setState( {
-          average: msg.data.average,
-          max: msg.data.max,
-          min: msg.data.min
-        }) 
-        console.log(this.state.average, this.state.max, this.state.min)
+        console.log(msg);
+        this.setState({
+          //Avg
+          voltageAvg: msg.data.average.voltageAvg,
+          currentAvg: msg.data.average.currentAvg,
+          powerAvg: msg.data.average.powerAvg,
+          opTempAvg: msg.data.average.opTempAvg,
+          suTempAvg: msg.data.average.suTempAvg,
+          //Max
+          voltageMax: msg.data.max.voltageMax,
+          currentMax: msg.data.max.currentMax,
+          powerMax: msg.data.max.powerMax,
+          opTempMax: msg.data.max.opTempMax,
+          suTempMax: msg.data.max.suTempMax,
+          //Min
+          voltageMin: msg.data.min.voltageMin,
+          currentMin: msg.data.min.currentMin,
+          powerMin: msg.data.min.powerMin,
+          opTempMin: msg.data.min.opTempMin,
+          suTempMin: msg.data.min.suTempMin
+        });
       }
     });
   };
@@ -113,15 +142,17 @@ class Dashboard extends Component {
     ipcRenderer.send("get-sensor-summary", {
       pumpId: pumpId,
       from: fromDate,
-      to: toDate,
+      to: toDate
     });
     console.log("info sent");
   };
 
-  // handleToTextFieldChange = (e) => {
-  //   this.setState({
-  //       toDate: e.target.value,
-  //   });
+  // handleStartSimulation = () => {
+  //   temp();
+  // }
+
+  // handleStopSimulation = () => {
+  //   stopSimulation();
   // }
 
   render() {
@@ -129,11 +160,34 @@ class Dashboard extends Component {
     const { value } = this.state;
     let id = 0;
 
-    
     const rows = [
-      createData("Average", 159, 6.0, 24, 4.0, 9.0, id),
-      createData("Max", 237, 9.0, 37, 4.3, 4.3, id),
-      createData("Min", 262, 16.0, 24, 6.0, 4.3, id)
+      createData(
+        "Average",
+        Math.round(this.state.voltageAvg),
+        Math.round(this.state.currentAvg),
+        Math.round(this.state.powerAvg),
+        Math.round(this.state.opTempAvg),
+        Math.round(this.state.suTempAvg),
+        id
+      ),
+      createData(
+        "Max",
+        this.state.voltageMax,
+        this.state.currentMax,
+        this.state.powerMax,
+        this.state.opTempMax,
+        this.state.suTempMax,
+        id
+      ),
+      createData(
+        "Min",
+        this.state.voltageMin,
+        this.state.currentMin,
+        this.state.powerMin,
+        this.state.opTempMin,
+        this.state.suTempMin,
+        id
+      )
     ];
 
     function createData(
@@ -160,9 +214,23 @@ class Dashboard extends Component {
       <Fragment>
         <MuiThemeProvider theme={mainTheme}>
           <div className={classes.root}>
-            <Typography variant="h4" color="primary" gutterBottom>
-              {this.props.sensorName + " Dashboard"}
-            </Typography>
+            <Grid container spacing={24}>
+              <Grid item xs={6}>
+                <Typography variant="h4" color="primary" gutterBottom>
+                  {this.props.sensorName + " Dashboard"}
+                </Typography>
+              </Grid>
+              {/* <Grid item xs={3}>
+                <Button onClick={this.handleStartSimulation()}>
+                  Start Simulation
+                </Button>
+              </Grid> */}
+              {/* <Grid item xs={3}>
+                <Button onClick={this.handleStopSimulation()}>
+                  Stop Simulation
+                </Button>
+              </Grid> */}
+            </Grid>
             <MonitoringData />
             <br />
             <Tabs
@@ -276,7 +344,7 @@ class Dashboard extends Component {
                     onChange={e => this.setState({ fromDate: e.target.value })}
                     InputLabelProps={{
                       shrink: true,
-                      color: 'white'
+                      color: "white"
                     }}
                   />
                 </form>
@@ -296,7 +364,9 @@ class Dashboard extends Component {
                 <Button
                   variant="outlined"
                   className={classes.customButton}
-                  onClick={() => {this.handleSendChange()}}
+                  onClick={() => {
+                    this.handleSendChange();
+                  }}
                 >
                   Send
                 </Button>
