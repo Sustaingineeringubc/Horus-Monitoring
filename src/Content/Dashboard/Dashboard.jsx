@@ -96,24 +96,27 @@ class Dashboard extends Component {
       } else {
         this.setState({
           //Avg
-          voltageAvg: msg.data.average.voltageAvg,
-          currentAvg: msg.data.average.currentAvg,
-          powerAvg: msg.data.average.powerAvg,
-          opTempAvg: msg.data.average.opTempAvg,
-          suTempAvg: msg.data.average.suTempAvg,
+          voltageAvg: (msg.data === false) ? 0 : msg.data.average.voltageAvg,
+          currentAvg: (msg.data === false) ? 0 : msg.data.average.currentAvg,
+          powerAvg: (msg.data === false) ? 0 : msg.data.average.powerAvg,
+          opTempAvg: (msg.data === false) ? 0 : msg.data.average.opTempAvg,
+          suTempAvg: (msg.data === false) ? 0 : msg.data.average.suTempAvg,
           //Max
-          voltageMax: msg.data.max.voltageMax,
-          currentMax: msg.data.max.currentMax,
-          powerMax: msg.data.max.powerMax,
-          opTempMax: msg.data.max.opTempMax,
-          suTempMax: msg.data.max.suTempMax,
+          voltageMax: (msg.data === false) ? 0 : msg.data.max.voltageMax,
+          currentMax: (msg.data === false) ? 0 : msg.data.max.currentMax,
+          powerMax: (msg.data === false) ? 0 : msg.data.max.powerMax,
+          opTempMax: (msg.data === false) ? 0 : msg.data.max.opTempMax,
+          suTempMax: (msg.data === false) ? 0 : msg.data.max.suTempMax,
           //Min
-          voltageMin: msg.data.min.voltageMin,
-          currentMin: msg.data.min.currentMin,
-          powerMin: msg.data.min.powerMin,
-          opTempMin: msg.data.min.opTempMin,
-          suTempMin: msg.data.min.suTempMin
+          voltageMin: (msg.data === false) ? 0 : msg.data.min.voltageMin,
+          currentMin: (msg.data === false) ? 0 : msg.data.min.currentMin,
+          powerMin: (msg.data === false) ? 0 : msg.data.min.powerMin,
+          opTempMin: (msg.data === false) ? 0 : msg.data.min.opTempMin,
+          suTempMin: (msg.data === false) ? 0 : msg.data.min.suTempMin
         });
+        if (msg.data === false) {
+          alert('No entries could be found within this time period');
+        } 
       }
     });
   };
