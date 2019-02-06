@@ -31,13 +31,13 @@ exports.getAvgFromData = function (dataList) {
             let opTempAvg = opTempSum / size
             let suTempAvg = suTempSum / size
             
-            let avgList = [
+            let avgList = {
                 voltageAvg, 
                 currentAvg,
                 powerAvg,
                 opTempAvg,
                 suTempAvg
-            ]
+            }
 
             return resolve(avgList)
 
@@ -63,13 +63,13 @@ exports.getMaxFromData = function (dataList) {
             let opTempMax = Math.max(...opTempList)
             let suTempMax = Math.max(...suTempList)
 
-            let maxList = [
+            let maxList = {
                 voltageMax, 
                 currentMax,
                 powerMax,
                 opTempMax,
                 suTempMax
-            ]
+            }
 
             return resolve(maxList)
 
@@ -95,13 +95,13 @@ exports.getMinFromData = function (dataList) {
             let opTempMin = Math.min(...opTempList)
             let suTempMin = Math.min(...suTempList)
 
-            let minList = [
+            let minList = {
                 voltageMin, 
                 currentMin,
                 powerMin,
                 opTempMin,
                 suTempMin
-            ]
+            }
 
             return resolve(minList)
 

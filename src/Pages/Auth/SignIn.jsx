@@ -29,8 +29,8 @@ class SignInPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "admin@gmail.com",
-      password: "root",
+      username: "admin",
+      password: "admin123",
       error: null,
       openDialog: false,
       isRemembered: false

@@ -371,10 +371,35 @@ describe('Datastore Wrapper Functions Testing', function () {
     
       let summary = await datastore.getSummaryData(TEST_DATA4)
       //Assert List of Avgs
-      assert.deepStrictEqual(summary[0], [ 126.2, 1.6, 5.4, 3.8, 4.6 ])
+      assert.deepStrictEqual(summary.average, AVG_TEST)
       //Assert List of Max Values
-      assert.deepStrictEqual(summary[1], [ 173, 5, 9, 7, 9 ])
+      assert.deepStrictEqual(summary.max, MAX_TEST)
       //Assert List of Min Values
-      assert.deepStrictEqual(summary[2], [ 103, 0, 1, 1, 1 ])
+      assert.deepStrictEqual(summary.min, MIN_TEST)
     })
   });
+
+  // Expected Results for getSummaryData
+  const AVG_TEST = {
+    voltageAvg: 126.2, 
+    currentAvg: 1.6,
+    powerAvg: 5.4,
+    opTempAvg: 3.8,
+    suTempAvg: 4.6
+  }
+
+  const MAX_TEST = {
+    voltageMax: 173, 
+    currentMax: 5,
+    powerMax: 9,
+    opTempMax: 7,
+    suTempMax: 9
+  }
+
+  const MIN_TEST = {
+    voltageMin: 103, 
+    currentMin: 0,
+    powerMin: 1,
+    opTempMin: 1,
+    suTempMin: 1
+  }
